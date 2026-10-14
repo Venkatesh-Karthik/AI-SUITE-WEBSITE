@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { Logo } from "@/components/Logo";
+import { AccountMenu } from "@/components/AccountMenu";
 
 const links = [
   { href: "/#assistants", label: "Assistants" },
@@ -45,17 +46,11 @@ export function Navbar() {
 
         <div className="hidden md:flex items-center gap-4">
           {status === "authenticated" ? (
-            <>
-              <Link href="/dashboard" className="text-sm text-core-muted hover:text-core-text">
-                Dashboard
-              </Link>
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="text-sm px-4 py-2 rounded-md border border-core-line hover:border-suite/60 transition-colors"
-              >
-                Sign out
-              </button>
-            </>
+            <AccountMenu
+              name={session?.user?.name}
+              email={session?.user?.email}
+              image={session?.user?.image}
+            />
           ) : (
             <Link
               href="/login"
@@ -97,8 +92,27 @@ export function Navbar() {
           <div className="h-px bg-core-line my-1" />
           {status === "authenticated" ? (
             <>
+              <div className="flex items-center gap-3 pb-1">
+                <span className="relative w-8 h-8 rounded-full bg-suite/15 border border-suite/40 flex items-center justify-center text-xs font-display font-semibold text-suite overflow-hidden flex-shrink-0">
+                  {session?.user?.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={session.user.image} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    (session?.user?.name || session?.user?.email || "?").trim().charAt(0).toUpperCase()
+                  )}
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm truncate">{session?.user?.name || "AI Suite user"}</span>
+                  {session?.user?.email && (
+                    <span className="block text-xs text-core-muted truncate">{session.user.email}</span>
+                  )}
+                </span>
+              </div>
               <Link href="/dashboard" onClick={() => setOpen(false)}>
                 Dashboard
+              </Link>
+              <Link href="/dashboard/account" onClick={() => setOpen(false)}>
+                Account settings
               </Link>
               <button className="text-left" onClick={() => signOut({ callbackUrl: "/" })}>
                 Sign out

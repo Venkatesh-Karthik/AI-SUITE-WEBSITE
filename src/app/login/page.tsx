@@ -2,13 +2,25 @@
 
 import { Suspense, useState, useRef, useEffect, FormEvent } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { Atmosphere } from "@/components/Atmosphere";
+import { GoogleIcon } from "@/components/GoogleIcon";
 
 type Step = "email" | "otp";
 
 const RESEND_COOLDOWN = 45;
+
+// Only allow same-origin, relative redirect targets (e.g. "/dashboard",
+// "/api/download"). Never follow an absolute/external URL supplied via
+// the callbackUrl query param — that would be an open-redirect after a
+// real sign-in.
+function safeCallbackUrl(raw: string | null): string {
+  if (!raw) return "/dashboard";
+  if (raw.startsWith("/") && !raw.startsWith("//")) return raw;
+  return "/dashboard";
+}
 
 export default function LoginPage() {
   return (
@@ -19,9 +31,8 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
-  const router = useRouter();
   const params = useSearchParams();
-  const callbackUrl = params.get("callbackUrl") || "/dashboard";
+  const callbackUrl = safeCallbackUrl(params.get("callbackUrl"));
 
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
@@ -120,7 +131,9 @@ function LoginForm() {
         setLoading("idle");
         return;
       }
-      router.push(callbackUrl);
+      // Full navigation (not the client router) so callback targets that
+      // aren't app pages — e.g. /api/download — are followed correctly.
+      window.location.href = callbackUrl;
     } catch {
       setError("Network error verifying your code. Try again.");
       setLoading("idle");
@@ -130,6 +143,15 @@ function LoginForm() {
   return (
     <main className="relative min-h-screen flex items-center justify-center px-6 py-24 overflow-hidden">
       <Atmosphere variant="hero" />
+      <Link
+        href="/"
+        className="absolute top-6 left-6 inline-flex items-center gap-1.5 text-xs text-core-muted hover:text-core-text transition-colors"
+      >
+        <svg viewBox="0 0 24 24" fill="none" className="w-3.5 h-3.5" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        Back to AI Suite
+      </Link>
       <div className="relative w-full max-w-sm">
         <div className="flex flex-col items-center text-center mb-10">
           <Logo size={44} showWordmark={false} priority />
@@ -149,10 +171,20 @@ function LoginForm() {
             <>
               <button
                 onClick={handleGoogle}
-                disabled={loading === "google"}
-                className="w-full flex items-center justify-center gap-3 rounded-md border border-core-line py-3 text-sm font-medium hover:border-suite/60 transition-colors disabled:opacity-50"
+                disabled={loading !== "idle"}
+                className="w-full flex items-center justify-center gap-3 rounded-md border border-core-line bg-white/[0.02] py-3 text-sm font-medium hover:border-suite/60 hover:bg-white/[0.04] transition-colors disabled:opacity-50"
               >
-                {loading === "google" ? "Connecting to Google…" : "Continue with Google"}
+                {loading === "google" ? (
+                  <>
+                    <span className="w-4 h-4 rounded-full border-2 border-core-muted border-t-transparent animate-spin" aria-hidden="true" />
+                    Connecting to Google…
+                  </>
+                ) : (
+                  <>
+                    <GoogleIcon className="w-[18px] h-[18px]" />
+                    Continue with Google
+                  </>
+                )}
               </button>
 
               <div className="flex items-center gap-3 my-6">
@@ -177,7 +209,7 @@ function LoginForm() {
                 />
                 <button
                   type="submit"
-                  disabled={loading === "send" || cooldown > 0}
+                  disabled={loading !== "idle" || cooldown > 0}
                   className="mt-2 rounded-md bg-suite text-core-bg font-display font-semibold text-sm py-3 tracking-wide hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
                   {loading === "send"
@@ -209,7 +241,7 @@ function LoginForm() {
               />
               <button
                 type="submit"
-                disabled={loading === "verify"}
+                disabled={loading !== "idle"}
                 className="mt-2 rounded-md bg-suite text-core-bg font-display font-semibold text-sm py-3 tracking-wide hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {loading === "verify" ? "Verifying…" : "Verify & continue"}
@@ -229,7 +261,7 @@ function LoginForm() {
                 <button
                   type="button"
                   onClick={() => requestCode()}
-                  disabled={cooldown > 0 || loading === "resend"}
+                  disabled={cooldown > 0 || loading !== "idle"}
                   className="hover:text-core-text disabled:opacity-50"
                 >
                   {loading === "resend" ? "Resending…" : cooldown > 0 ? `Resend in ${cooldown}s` : "Resend code"}
