@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { SignOutButton } from "@/components/SignOutButton";
 import { Logo } from "@/components/Logo";
 import { Atmosphere } from "@/components/Atmosphere";
+import { providerLabel } from "@/lib/providerLabels";
 
 export default async function AccountPage() {
   const session = await getServerSession(authOptions);
@@ -46,9 +47,9 @@ export default async function AccountPage() {
                 {user.accounts.map((a) => (
                   <span
                     key={a.provider}
-                    className="text-xs px-3 py-1 rounded-full border border-core-line capitalize"
+                    className="text-xs px-3 py-1 rounded-full border border-core-line"
                   >
-                    {a.provider}
+                    {providerLabel(a.provider)}
                   </span>
                 ))}
               </dd>

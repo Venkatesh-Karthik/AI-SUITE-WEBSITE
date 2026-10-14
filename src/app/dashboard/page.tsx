@@ -7,6 +7,8 @@ import { getDownloadInfo } from "@/lib/download";
 import { SignOutButton } from "@/components/SignOutButton";
 import { Logo } from "@/components/Logo";
 import { Atmosphere } from "@/components/Atmosphere";
+import { isAdminEmail } from "@/lib/admin";
+import { providerLabel } from "@/lib/providerLabels";
 
 const assistants = [
   { name: "JARVIS", color: "text-jarvis", border: "border-jarvis/40" },
@@ -27,7 +29,9 @@ export default async function DashboardPage() {
   if (!user) redirect("/login?callbackUrl=/dashboard");
 
   const info = getDownloadInfo();
-  const providers = user.accounts.map((a) => a.provider).join(", ") || "email-otp";
+  const providers =
+    user.accounts.map((a) => providerLabel(a.provider)).join(", ") || providerLabel("email-otp");
+  const isAdmin = isAdminEmail(user.email);
 
   return (
     <main className="relative min-h-screen px-6 py-24 overflow-hidden">
@@ -43,7 +47,17 @@ export default async function DashboardPage() {
               Welcome back{user.name ? `, ${user.name}` : ""}
             </h1>
           </div>
-          <SignOutButton />
+          <div className="flex items-center gap-3">
+            {isAdmin && (
+              <Link
+                href="/dashboard/admin"
+                className="text-sm px-4 py-2 rounded-md border border-suite/40 text-suite hover:border-suite/70 transition-colors"
+              >
+                Admin
+              </Link>
+            )}
+            <SignOutButton />
+          </div>
         </div>
 
         <section className="grid sm:grid-cols-3 gap-4 mb-10">
@@ -72,7 +86,7 @@ export default async function DashboardPage() {
               </div>
               <div className="flex justify-between border-b border-core-line pb-2">
                 <dt className="text-core-muted">Signed in with</dt>
-                <dd className="capitalize">{providers}</dd>
+                <dd>{providers}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-core-muted">Member since</dt>
