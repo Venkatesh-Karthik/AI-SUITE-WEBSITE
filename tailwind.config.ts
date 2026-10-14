@@ -31,10 +31,20 @@ const config: Config = {
         "spin-slow": "spin 24s linear infinite",
         "spin-slower": "spin 40s linear infinite reverse",
         "pulse-soft": "pulse-soft 3s ease-in-out infinite",
+        float: "float 6s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 4s ease-in-out infinite",
       },
       keyframes: {
         "pulse-soft": {
           "0%, 100%": { opacity: "0.6" },
+          "50%": { opacity: "1" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-14px)" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { opacity: "0.5" },
           "50%": { opacity: "1" },
         },
       },

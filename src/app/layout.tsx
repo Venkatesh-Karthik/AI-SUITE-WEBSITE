@@ -30,7 +30,6 @@ export const metadata: Metadata = {
     title: "AI Suite — JARVIS, FRIDAY & EDITH for Windows",
     description: "One suite, multiple intelligences. Download AI Suite for Windows.",
   },
-  icons: { icon: "/favicon.ico" },
   robots: { index: true, follow: true },
 };
 
