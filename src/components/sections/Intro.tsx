@@ -1,6 +1,10 @@
 export function Intro() {
   return (
-    <section id="intro" className="relative py-28 px-6 border-t border-core-line">
+    <section id="intro" className="relative py-28 px-6 border-t border-core-line overflow-hidden">
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-px bg-gradient-to-r from-transparent via-suite/60 to-transparent"
+        aria-hidden="true"
+      />
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-suite text-xs tracking-[0.3em] uppercase mb-4">AI Suite</p>
         <h2 className="font-display text-2xl md:text-4xl font-bold leading-snug">
