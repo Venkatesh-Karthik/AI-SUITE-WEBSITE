@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background-color: #0a0e14;
+  color: #e7ecf2;
+}
+
+.bg-grid {
+  background-image: linear-gradient(to right, #1a222e 1px, transparent 1px),
+    linear-gradient(to bottom, #1a222e 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.glass-panel {
+  background: rgba(19, 25, 35, 0.6);
+  backdrop-filter: blur(14px);
+  border: 1px solid #252e3d;
+}
+
+.text-glow-suite {
+  text-shadow: 0 0 24px rgba(78, 201, 192, 0.35);
+}
+
+/* Visible keyboard focus ring across the site */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #4ec9c0;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
