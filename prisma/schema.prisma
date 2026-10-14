@@ -85,15 +85,21 @@ model OtpCode {
   @@map("otp_codes")
 }
 
-// Tracks a download click for future release/analytics features.
-// Not required for the download button to work.
+// Download audit log. Every successful, AUTHENTICATED download request
+// through /api/download creates one row here. Unauthenticated attempts
+// are redirected to /login and never logged. ipAddress/userAgent are
+// optional, coarse request metadata for admin monitoring only — no
+// additional personal data is collected.
 model DownloadEvent {
   id        String   @id @default(cuid())
   userId    String?
   version   String
+  ipAddress String?
+  userAgent String?
   createdAt DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
+  @@index([createdAt])
   @@map("download_events")
 }
