@@ -1,0 +1,99 @@
+// AI Suite database schema.
+// Users can hold multiple auth methods (Google, Email OTP) that resolve
+// to a single account when the verified email address matches, so
+// future features (licenses, devices, downloads) attach to one identity.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+  downloads DownloadEvent[]
+
+  @@map("users")
+}
+
+// One row per linked auth method (google, email-otp, ...).
+// Multiple Accounts can point at the same User -> account linking.
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// Email OTP codes. Stored hashed — never the raw 6-digit code.
+model OtpCode {
+  id          String   @id @default(cuid())
+  email       String
+  codeHash    String
+  expiresAt   DateTime
+  attempts    Int      @default(0)
+  consumedAt  DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([email])
+  @@map("otp_codes")
+}
+
+// Tracks a download click for future release/analytics features.
+// Not required for the download button to work.
+model DownloadEvent {
+  id        String   @id @default(cuid())
+  userId    String?
+  version   String
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("download_events")
+}
