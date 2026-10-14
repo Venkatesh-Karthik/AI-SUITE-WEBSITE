@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { authPages } from "@/lib/authPages";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -11,7 +12,7 @@ export const authOptions: NextAuthOptions = {
   // Account linking still happens through the Prisma adapter's User/Account
   // tables, so Google and Email-OTP resolve to the same User by email.
   session: { strategy: "jwt" },
-  pages: { signIn: "/login" },
+  pages: authPages,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
