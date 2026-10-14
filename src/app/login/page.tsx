@@ -3,6 +3,8 @@
 import { Suspense, useState, useRef, useEffect, FormEvent } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Logo } from "@/components/Logo";
+import { Atmosphere } from "@/components/Atmosphere";
 
 type Step = "email" | "otp";
 
@@ -126,10 +128,12 @@ function LoginForm() {
   }
 
   return (
-    <main className="min-h-screen bg-grid flex items-center justify-center px-6 py-24">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-10">
-          <p className="font-display font-bold tracking-[0.3em] text-sm">AI SUITE</p>
+    <main className="relative min-h-screen flex items-center justify-center px-6 py-24 overflow-hidden">
+      <Atmosphere variant="hero" />
+      <div className="relative w-full max-w-sm">
+        <div className="flex flex-col items-center text-center mb-10">
+          <Logo size={44} showWordmark={false} priority />
+          <p className="font-display font-bold tracking-[0.3em] text-sm mt-4">AI SUITE</p>
           <h1 className="font-display text-2xl font-bold mt-3">
             {step === "email" ? "Welcome back" : "Verify your email"}
           </h1>
@@ -140,7 +144,7 @@ function LoginForm() {
           )}
         </div>
 
-        <div className="glass-panel rounded-xl p-6">
+        <div className="glass-panel rounded-xl p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)]">
           {step === "email" && (
             <>
               <button

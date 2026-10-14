@@ -5,6 +5,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getDownloadInfo } from "@/lib/download";
 import { SignOutButton } from "@/components/SignOutButton";
+import { Logo } from "@/components/Logo";
+import { Atmosphere } from "@/components/Atmosphere";
 
 const assistants = [
   { name: "JARVIS", color: "text-jarvis", border: "border-jarvis/40" },
@@ -28,10 +30,12 @@ export default async function DashboardPage() {
   const providers = user.accounts.map((a) => a.provider).join(", ") || "email-otp";
 
   return (
-    <main className="min-h-screen bg-grid px-6 py-24">
-      <div className="mx-auto max-w-5xl">
+    <main className="relative min-h-screen px-6 py-24 overflow-hidden">
+      <Atmosphere variant="section" />
+      <div className="relative mx-auto max-w-5xl">
         <div className="flex items-center justify-between mb-12">
           <div>
+            <Logo size={28} className="mb-4" />
             <p className="text-suite text-xs tracking-[0.3em] uppercase mb-2">
               AI Suite Command Center
             </p>
@@ -44,7 +48,10 @@ export default async function DashboardPage() {
 
         <section className="grid sm:grid-cols-3 gap-4 mb-10">
           {assistants.map((a) => (
-            <div key={a.name} className={`glass-panel rounded-xl p-6 border ${a.border}`}>
+            <div
+              key={a.name}
+              className={`glass-panel rounded-xl p-6 border ${a.border} transition-transform duration-300 hover:-translate-y-1`}
+            >
               <span className={`font-display font-bold text-lg ${a.color}`}>{a.name}</span>
               <p className="text-xs text-core-muted mt-2 tracking-widest uppercase">
                 Ready on desktop app

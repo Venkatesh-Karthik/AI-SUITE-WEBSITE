@@ -4,6 +4,8 @@ import Link from "next/link";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { SignOutButton } from "@/components/SignOutButton";
+import { Logo } from "@/components/Logo";
+import { Atmosphere } from "@/components/Atmosphere";
 
 export default async function AccountPage() {
   const session = await getServerSession(authOptions);
@@ -16,8 +18,10 @@ export default async function AccountPage() {
   if (!user) redirect("/login?callbackUrl=/dashboard/account");
 
   return (
-    <main className="min-h-screen bg-grid px-6 py-24">
-      <div className="mx-auto max-w-2xl">
+    <main className="relative min-h-screen px-6 py-24 overflow-hidden">
+      <Atmosphere variant="section" />
+      <div className="relative mx-auto max-w-2xl">
+        <Logo size={28} className="mb-6" />
         <Link href="/dashboard" className="text-xs text-core-muted hover:text-core-text">
           ← Command Center
         </Link>
