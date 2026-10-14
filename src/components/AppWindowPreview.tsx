@@ -14,15 +14,12 @@ type AppWindowPreviewProps = {
 /**
  * A restrained, realistic preview of the AI Suite Windows desktop app:
  * title bar, assistant switcher sidebar, and a conversation area with a
- * voice-listening indicator. No real application screenshots exist yet
- * in this repo (public/screenshots, public/models are empty), so this is
- * a UI mockup built only from capabilities already described on this
- * site (JARVIS/FRIDAY/EDITH, voice interaction, one account) — not an
- * invented feature set.
+ * voice-listening indicator. Used as a compact illustrative mockup in the
+ * download section; the hero itself uses the real application screenshots
+ * from public/screenshots/ (see Hero.tsx) rather than this mockup.
  *
  * Server-safe (no hooks) so it can be used from server components
- * (download section) as well as wrapped in motion from client components
- * (hero).
+ * (download section) as well as wrapped in motion from client components.
  */
 export function AppWindowPreview({ className = "", compact = false }: AppWindowPreviewProps) {
   return (

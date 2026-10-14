@@ -12,7 +12,7 @@ function FridayIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" aria-hidden="true">
       <path
-        d="M2.5 12h3.2l1.8-6.5 3.6 13 2.4-10 1.6 3.5h6.4"
+        d="M9 8l-4.5 4L9 16M15 8l4.5 4-4.5 4"
         stroke="currentColor"
         strokeWidth="1.4"
         strokeLinecap="round"
@@ -26,12 +26,17 @@ function EdithIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" aria-hidden="true">
       <path
-        d="M2 12c2.4-4.5 5.8-7 10-7s7.6 2.5 10 7c-2.4 4.5-5.8 7-10 7s-7.6-2.5-10-7Z"
+        d="M12 3.2 19 6v6c0 4.6-3 7.7-7 9.2-4-1.5-7-4.6-7-9.2V6l7-2.8Z"
         stroke="currentColor"
         strokeWidth="1.4"
       />
-      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.4" />
-      <circle cx="12" cy="12" r="1" fill="currentColor" />
+      <path
+        d="M9 12.2l2.1 2.1L15.5 10"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -40,35 +45,35 @@ const assistants = [
   {
     id: "jarvis",
     name: "JARVIS",
-    role: "Primary assistant",
+    role: "Personal AI assistant",
     hex: "#3E8EFF",
     color: "text-jarvis",
     border: "border-jarvis/40",
     icon: JarvisIcon,
     description:
-      "The default assistant for AI Suite: conversation, task handling, and day-to-day desktop assistance in one place.",
+      "Handles everyday interaction through voice and vision, with memory, automation, file access, and system control on your desktop.",
   },
   {
     id: "friday",
     name: "FRIDAY",
-    role: "Secondary assistant",
+    role: "AI development assistant",
     hex: "#E8546B",
     color: "text-friday",
     border: "border-friday/40",
     icon: FridayIcon,
     description:
-      "A distinct assistant persona within the same account — its own voice and focus, running on the same suite.",
+      "A development environment for coding, projects, Git, and debugging — built around real developer workflows and toolchains.",
   },
   {
     id: "edith",
     name: "EDITH",
-    role: "Third assistant",
+    role: "AI security guardian",
     hex: "#9D7CFF",
     color: "text-edith",
     border: "border-edith/40",
     icon: EdithIcon,
     description:
-      "The third assistant in the ecosystem, sharing your account, settings, and download across the suite.",
+      "A security and system-intelligence guardian focused on threat monitoring, suspicious activity, and system-level intelligence.",
   },
 ];
 
@@ -108,10 +113,6 @@ export function Assistants() {
           })}
         </div>
 
-        <p className="text-xs text-core-muted mt-8 max-w-2xl">
-          Replace this copy with real per-assistant capabilities once connected to the AI Suite
-          application repository — don&apos;t ship invented feature claims.
-        </p>
       </div>
     </section>
   );

@@ -35,9 +35,9 @@ function AccountIcon() {
   );
 }
 
-// NOTE: these are placeholder categories only. Before shipping, replace
-// with capabilities verified against the actual AI Suite application —
-// do not present unverified claims as product features.
+// Established, verifiable capabilities only — confirmed by the real
+// application screenshots in public/screenshots/ and the site's own
+// authentication architecture.
 const features = [
   { title: "Voice interaction", desc: "Talk to your assistant instead of typing.", icon: VoiceIcon },
   { title: "Desktop integration", desc: "Runs alongside your other Windows apps.", icon: DesktopIcon },
